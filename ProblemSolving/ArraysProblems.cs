@@ -70,7 +70,7 @@ namespace ProblemSolving
         {
             int count = 0;
             HashSet<int> types = new HashSet<int>();
-            for (int i = 0; i <= J.Length-1; i++)
+            for (int i = 0; i <= J.Length - 1; i++)
             {
                 types.Add(J[i]);
             }
@@ -78,9 +78,113 @@ namespace ProblemSolving
             {
                 if (types.Contains(S[i]))
                     count++;
-                    
+
             }
             return count;
         }
+
+        //https://leetcode.com/problems/how-many-numbers-are-smaller-than-the-current-number/
+        public static int[] SmallerNumbersThanCurrent(int[] nums)
+        {
+            var result = new int[nums.Length];
+            for (int i = 0; i < nums.Length; i++)
+            {
+                int count = 0;
+                int value = nums[i];
+                for (int j = 0; j < nums.Length; j++)
+                {
+                    if (value == nums[j])
+                    {
+                        continue;
+                    }
+                    else if (nums[j] > value)
+                        count++;
+                }
+                result[i] = count;
+            }
+            return result;
+        }
+
+        //https://leetcode.com/problems/decompress-run-length-encoded-list/
+        public static int[] DecompressRLElist(int[] nums)
+        {
+            List<int> result = new List<int>();
+            for (int i = 0; i < nums.Length / 2; i += 1)
+            {
+                int freq = nums[2 * i];
+                int value = nums[2 * i + 1];
+
+                for (int ii = 0; ii < freq; ii++)
+                {
+                    result.Add(value);
+                }
+            }
+
+            return result.ToArray();
+        }
+
+        //https://leetcode.com/problems/subtract-the-product-and-sum-of-digits-of-an-integer/
+        public static int SubtractProductAndSum(int num)
+        {
+            int prod = 1;
+            int sum = 0;
+            while (num > 0)
+            {
+                var digit = num % 10;
+                prod *= digit;
+                sum *= digit;
+                num = num / 10;
+            }
+            return prod - sum;
+        }
+
+        //https://leetcode.com/problems/create-target-array-in-the-given-order/
+        public static int[] CreateTargetArray(int[] nums, int[] index)
+        {
+            var result = new int[nums.Length];
+
+            for (int i = 0; i < nums.Length; i++)
+            {
+                var idx = index[i];
+                if (idx < i)
+                {
+                    for (int j = i; j > idx; j--)
+                    {
+                        result[j] = result[j - 1];
+                    }
+
+                }
+                result[idx] = nums[i];
+            }
+            return result;
+        }
+
+        //https://leetcode.com/problems/find-numbers-with-even-number-of-digits/
+        public  static  int FindNumbers(int[] nums)
+        {
+            int count = 0;
+            for (int i = 0; i < nums.Length; i++)
+            {
+                if ((nums[i] >= 10 && nums[i] < Math.Pow(10, 2)) ||
+                    (nums[i] >= Math.Pow(10, 3) && (nums[i] < Math.Pow(10, 4))) ||
+                    (nums[i] >= Math.Pow(10, 5) && (nums[i] < Math.Pow(10, 6))))
+                {
+                    count++;
+                }
+            }
+            return count;
+        }
+        #region helper methods
+        //private static int[] shiftArrayOnePositionRight(int[] arr, int startingIndex, int endingIndex)
+        //{
+        //    var shiftedArray = new int[arr.Length];
+        //    for (int i = startingIndex, j = 0; i <= endingIndex; j++, i++)
+        //    {
+        //        shiftedArray[j] = arr[i];
+        //    }
+        //    return arr;
+        //}
+        #endregion
     }
+
 }

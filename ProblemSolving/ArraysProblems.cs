@@ -160,7 +160,7 @@ namespace ProblemSolving
         }
 
         //https://leetcode.com/problems/find-numbers-with-even-number-of-digits/
-        public  static  int FindNumbers(int[] nums)
+        public static int FindNumbers(int[] nums)
         {
             int count = 0;
             for (int i = 0; i < nums.Length; i++)
@@ -175,6 +175,72 @@ namespace ProblemSolving
             return count;
         }
         #region helper methods
+        public static void BinarySearch(int[] values, int target)
+        {
+            if (values == null || values.Length == 0)
+            {
+                Console.WriteLine("Not Found");
+            }
+            int first = 0;
+            int last = values.Length - 1;
+
+
+            while (first <= last)
+            {
+                int mid = (first + last) / 2;
+                if (values[mid] == target)
+                {
+                    Console.WriteLine(mid);
+                    return;
+                }
+                else
+                {
+                    if (values[mid] > target)
+                        last = mid - 1;
+                    else
+                        first = mid + 1;
+                }
+            }
+            Console.WriteLine("Not Found");
+        }
+
+        public static int[] SelectionSort(int[] values)
+        {
+            for (int i = 0; i < values.Length - 1; i++)
+            {
+                int smallest = i;
+                for (int j = i + 1; j < values.Length; j++)
+                {
+                    if (values[j] < values[smallest])
+                    {
+                        smallest = j;
+                    }
+                }
+                var aux = values[i];
+                values[i] = values[smallest];
+                values[smallest] = aux;
+            }
+            return values;
+        }
+
+        public static int[] InsertionSort(int[] values)
+        {
+            for (int i = 1; i < values.Length; i++)
+            {
+                int key = values[i];
+                int j = i - 1;
+                while (j >= 0 && values[j] > key)
+                {
+                    values[j + 1] = values[j];
+                    j -= 1;
+                }
+
+                values[j + 1] = key;
+            }
+
+            return values;
+        }
+
         //private static int[] shiftArrayOnePositionRight(int[] arr, int startingIndex, int endingIndex)
         //{
         //    var shiftedArray = new int[arr.Length];

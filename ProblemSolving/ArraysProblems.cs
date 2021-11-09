@@ -241,6 +241,93 @@ namespace ProblemSolving
             return values;
         }
 
+        public static void MergeSort(int[] values, int left, int right)
+        {
+            if (left >= right)
+            {
+                return;
+            }
+            int mid = (left + right) / 2;
+            MergeSort(values, left, mid);
+            MergeSort(values, mid + 1, right);
+
+            Merge(values, left, mid, right);
+
+        }
+
+        private static void Merge(int[] values, int left, int mid, int right)
+        {
+            int n1 = (mid - left) + 1;
+            int n2 = right - mid;
+            int[] leftArray = new int[n1];
+            int[] rightArray = new int[n2];
+
+            for (int i = 0; i < n1; i++)
+            {
+                leftArray[i] = values[left + i];
+            }
+            for (int j = 0; j < n2; j++)
+            {
+                rightArray[j] = values[mid + 1 + j];
+            }
+
+            int x = 0;
+
+            // Initial index of second subarray
+            int y = 0;
+
+            // Initial index of merged subarray
+            int k = left;
+
+            while (x < n1 && y < n2)
+            {
+                if (leftArray[x] <= rightArray[y])
+                {
+                    values[k] = leftArray[x];
+                    x++;
+                }
+                else
+                {
+                    values[k] = rightArray[y];
+                    y++;
+                }
+                k++;
+            }
+
+            // Copy the remaining elements of
+            // L[], if there are any
+            while (x < n1)
+            {
+                values[k] = leftArray[x];
+                x++;
+                k++;
+            }
+
+            // Copy the remaining elements of
+            // R[], if there are any
+            while (y < n2)
+            {
+                values[k] = rightArray[y];
+                y++;
+                k++;
+            }
+        }
+
+        public static int[] COUNTKEYSEQUAL(int [] values,int n, int m)
+        {
+            int[] equal = new int[m];
+            for (int i = 0; i < equal.Length; i++)
+            {
+                equal[i] = 0;
+            }
+            for (int i = 0; i < n; i++)
+            {
+                var key = values[i];
+                equal[key] += 1;
+            }
+            return equal;
+        }
+
         //private static int[] shiftArrayOnePositionRight(int[] arr, int startingIndex, int endingIndex)
         //{
         //    var shiftedArray = new int[arr.Length];

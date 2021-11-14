@@ -26,9 +26,10 @@ namespace ProblemSolving
 
             var equal = ArraysProblems.COUNTKEYSEQUAL(countX, countX.Length, 7);
 
+
             //Console.WriteLine( LeetCodeRandomEasyProblems.NumIdenticalPairs(new int[] { 1, 2, 3, 1, 1, 3 }));
             //Console.WriteLine(string.Join(',', LeetCodeRandomEasyProblems.CountKDifference(new int[] { 1,2,2 ,1 },1)));
-            Console.WriteLine(LeetCodeRandomEasyProblems.SortSentence("book"));
+            Console.WriteLine(LeetCodeRandomEasyProblems.ReformatNumber("123 4 - 567"));
 
 
             //Console.WriteLine(LeetCodeRandomEasyProblems.IsValidParentheses("(("));

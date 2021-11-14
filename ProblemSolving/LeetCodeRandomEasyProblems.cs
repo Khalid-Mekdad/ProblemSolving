@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ProblemSolving
 {
-    public static class LeetCodeRandomEasyProblems
+    public class LeetCodeRandomEasyProblems
     {
         //public static int RomanToInt(string s)
         //{
@@ -652,8 +652,7 @@ namespace ProblemSolving
             return phrase.ToString();
         }
 
-
-        ///https://leetcode.com/problems/pascals-triangle/
+        ///https://leetcode.com/problems/pasacals-triangle/
         public static IList<IList<int>> Generate(int numRows)
         {
             var x = new List<List<int>>();
@@ -789,6 +788,424 @@ namespace ProblemSolving
             return count;
         }
 
+        ///https://leetcode.com/problems/number-of-strings-that-appear-as-substrings-in-word/
+        public static int NumOfStrings(string[] patterns, string word)
+        {
+            int count = 0;
+            for (int i = 0; i < patterns.Length; i++)
+            {
+                if (word.Contains(patterns[i]))
+                {
+                    count += 1;
+                }
+            }
+            return count;
+        }
+
+        /// https://leetcode.com/problems/destination-city/
+        public static string DestCity(IList<IList<string>> paths)
+        {
+            Dictionary<string, int> vp = new Dictionary<string, int>();
+            foreach (var path in paths)
+            {
+                for (int i = 0; i < path.Count; i++)
+                {
+                    if (!vp.ContainsKey(path[i]))
+                    {
+                        if (i == 0)
+                        {
+                            vp.Add(path[i], 1);
+                        }
+                        else
+                        {
+                            vp.Add(path[i], 3);
+                        }
+                    }
+                    else
+                    {
+                        if ((vp[path[i]] == 3 && i == 0) || (vp[path[i]] == 1 && i == 1))
+                        {
+                            vp[path[i]] = 2;
+                        }
+                    }
+                }
+            }
+
+            return vp.FirstOrDefault(s => s.Value == 3).Key;
+        }
+
+        ///https://leetcode.com/problems/reverse-only-letters/
+        public static string ReverseOnlyLetters(string s)
+        {
+            int l = 0;
+            int r = s.Length - 1;
+            char temp;
+            StringBuilder result = new StringBuilder(s);
+            while (l <= r)
+            {
+                if (!isCharAlphabetic(s[l]) && !isCharAlphabetic(s[r]))
+                {
+                    l += 1;
+                    r -= 1;
+                }
+                else if (!isCharAlphabetic(s[l]) && !isCharAlphabetic(s[r]))
+                {
+                    temp = result[l];
+                    result[l] = result[r];
+                    result[r] = temp;
+
+                    l += 1;
+                    r -= 1;
+                }
+                else if (!isCharAlphabetic(s[l]))
+                {
+                    l += 1;
+                }
+                else if (!isCharAlphabetic(s[r]))
+                {
+                    r -= 1;
+                }
+
+            }
+            return result.ToString();
+        }
+
+        ///https://leetcode.com/problems/shortest-distance-to-a-character/
+        public static int[] ShortestToChar(string s, char c)
+        {
+            var indexs = new HashSet<int>();
+            var result = new List<int>();
+
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (s[i] == c)
+                    indexs.Add(i);
+            }
+
+            for (int i = 0; i < s.Length; i++)
+            {
+                result.Add(indexs.Min(s => Math.Abs(i - s)));
+            }
+
+            return result.ToArray();
+
+        }
+
+        /// https://leetcode.com/problems/truncate-sentence/
+        public static string TruncateSentence(string s, int k)
+        {
+            var words = s.Split(' ');
+            return string.Join(" ", words.Take(k).ToArray());
+        }
+
+        /// https://leetcode.com/problems/check-if-all-characters-have-equal-number-of-occurrences/
+        public static bool AreOccurrencesEqual(string s)
+        {
+            Dictionary<char, int> counter = new Dictionary<char, int>();
+            foreach (var item in s)
+            {
+                if (!counter.ContainsKey(item))
+                {
+                    counter.Add(item, 1);
+                }
+                else
+                {
+                    counter[item] += 1;
+                }
+            }
+
+            return (counter.GroupBy(s => s.Value).Select(s => s.Key)).Count() == 1;
+        }
+
+        ///https://leetcode.com/problems/isomorphic-strings/
+        public static bool IsIsomorphic(string s, string t)
+        {
+            var mapper1 = new Dictionary<char, char>();
+            var mapper2 = new Dictionary<char, char>();
+            for (int i = 0; i < s.Length; i++)
+            {
+                if ((mapper1.ContainsKey(s[i]) && mapper1[s[i]] != t[i]) ||
+                   mapper2.ContainsKey(t[i]) && mapper2[t[i]] != s[i])
+                {
+                    return false;
+                }
+                else
+                {
+                    mapper1.TryAdd(s[i], t[i]);
+                    mapper1.TryAdd(t[i], s[i]);
+                }
+            }
+
+            return true;
+        }
+
+        ///https://leetcode.com/problems/find-the-difference/
+        public static char FindTheDifference(string s, string t)
+        {
+            if (string.IsNullOrEmpty(s))
+            {
+                return t[0];
+            }
+            Dictionary<char, int> k = new Dictionary<char, int>();
+            foreach (var item in t)
+            {
+                if (!k.ContainsKey(item))
+                {
+                    k.Add(item, 1);
+                }
+                else
+                {
+                    k[item] += 1;
+                }
+            }
+
+            if (k.Any(s => s.Value == 1))
+            {
+                return k.FirstOrDefault(s => s.Value == 1).Key;
+            }
+            else
+            {
+                return k.FirstOrDefault(s => k.Max(o => o.Value) == s.Value).Key;
+            }
+        }
+
+        ///https://leetcode.com/problems/split-a-string-in-balanced-strings/
+        public static int BalancedStringSplit(string s)
+        {
+            int L = 0;
+            int count = 0;
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (s[i] == 'L')
+                {
+                    L += 1;
+                }
+                else
+                {
+                    L -= 1;
+                }
+                if (L == 0)
+                {
+                    count += 1;
+                }
+            }
+
+            return count;
+        }
+
+        ///https://leetcode.com/problems/check-if-the-sentence-is-pangram/
+        public static bool CheckIfPangram(string sentence)
+        {
+            HashSet<char> chars = new HashSet<char>();
+            for (int i = 0; i < sentence.Length; i++)
+            {
+                if (!chars.Contains(sentence[i]))
+                {
+                    chars.Add(sentence[i]);
+                }
+            }
+
+            return chars.Count == 26;
+        }
+
+        ///https://leetcode.com/problems/determine-color-of-a-chessboard-square/
+        public static bool SquareIsWhite(string coordinates)
+        {
+            HashSet<char> oddBlack = new HashSet<char>()
+            {
+                'a','c','e','g'
+            };
+            if (oddBlack.Contains(coordinates[0]) && coordinates[1] % 2 != 0 ||
+                !oddBlack.Contains(coordinates[0]) && coordinates[1] % 2 == 0)
+            {
+                return false;
+            }
+            else
+                return true;
+        }
+
+        ///https://leetcode.com/problems/reverse-words-in-a-string-iii/
+        public static string ReverseWords(string s)
+        {
+            var splitter = s.Split(" ");
+            StringBuilder ss = new StringBuilder();
+            StringBuilder sub = new StringBuilder();
+            for (int i = 0; i < splitter.Length; i++)
+            {
+                sub.Clear();
+                for (int j = splitter[i].Length - 1; j >= 0; j--)
+                {
+                    sub.Append(splitter[i][j]);
+                }
+                ss.Append(sub);
+                if (i < (splitter.Length - 1))
+                    ss.Append(" ");
+            }
+
+
+            return ss.ToString();
+        }
+
+        ///https://leetcode.com/problems/maximum-number-of-words-you-can-type/
+        public static int CanBeTypedWords(string text, string brokenLetters)
+        {
+            HashSet<char> xx = new HashSet<char>(brokenLetters.ToCharArray());
+            var splitter = text.Split(" ");
+            var count = 0;
+            var match = false;
+            for (int i = 0; i < splitter.Length; i++)
+            {
+                match = false;
+                for (int j = 0; j < splitter[i].Length; j++)
+                {
+                    if (xx.Contains(splitter[i][j]))
+                    {
+                        match = true;
+                    }
+                }
+                if (!match)
+                {
+                    count++;
+                }
+
+            }
+            return count;
+        }
+
+        ///https://leetcode.com/problems/reformat-phone-number/
+        public static string ReformatNumber(string number)
+        {
+            int i = 0;
+            StringBuilder sb = new StringBuilder();
+            StringBuilder nums = new StringBuilder();
+            while (i < number.Length)
+            {
+                if (number[i] == ' ' || number[i] == '-')
+                {
+                    i += 1;
+                    continue;
+                }
+                nums.Append(number[i]);
+                i += 1;
+            }
+            i = 0;
+            int subStringLength = 0;
+            while (i < nums.Length)
+            {
+                subStringLength = nums.Length - i;
+
+                if (subStringLength > 4 || subStringLength == 3)
+                {
+                    sb.Append(nums[i]);
+                    sb.Append(nums[i + 1]);
+                    sb.Append(nums[i + 2]);
+                    sb.Append("-");
+                    i += 3;
+                }
+                else if (subStringLength == 2)
+                {
+                    sb.Append(nums[i]);
+                    sb.Append(nums[i + 1]);
+                    sb.Append("-");
+                    i += 2;
+                }
+                else if (subStringLength == 4)
+                {
+                    sb.Append(nums[i]);
+                    sb.Append(nums[i + 1]);
+                    sb.Append("-");
+                    sb.Append(nums[i + 2]);
+                    sb.Append(nums[i + 3]);
+                    sb.Append("-");
+                    i += 4;
+                }
+            }
+
+            return sb.ToString(0, sb.Length - 1);
+        }
+
+        ///https://leetcode.com/problems/uncommon-words-from-two-sentences/
+        public static string[] UncommonFromSentences(string s1, string s2)
+        {
+            var s1Splitter = s1.Split(" ");
+            var s2Splitter = s2.Split(" ");
+            var s1Map = new Dictionary<string, int>();
+
+            var s2Map = new Dictionary<string, int>();
+            List<string> sd = new List<string>();
+            for (int i = 0; i < s1Splitter.Length; i++)
+            {
+                if (!s1Map.ContainsKey(s1Splitter[i]))
+                {
+                    s1Map.Add(s1Splitter[i], 1);
+                }
+                else
+                {
+                    s1Map[s1Splitter[i]] += 1;
+                }
+            }
+
+            for (int i = 0; i < s2Splitter.Length; i++)
+            {
+                if (!s1Map.ContainsKey(s2Splitter[i]))
+                {
+                    s2Map.Add(s2Splitter[i], 1);
+                }
+                else
+                {
+                    s2Map[s2Splitter[i]] += 1;
+                }
+            }
+
+            foreach (var item in s1Map.Where(s => s.Value == 1))
+            {
+                if (!s2Map.ContainsKey(item.Key))
+                {
+                    sd.Add(item.Key);
+                }
+            }
+            foreach (var item in s2Map.Where(s => s.Value == 1))
+            {
+                if (!s2Map.ContainsKey(item.Key))
+                {
+                    sd.Add(item.Key);
+                }
+            }
+            return sd.ToArray();
+        }
+
+        ///https://leetcode.com/problems/redistribute-characters-to-make-all-strings-equal/
+        public bool MakeEqual(string[] words)
+        {
+            var allWords = string.Join("", words);
+
+            var vals = new Dictionary<char, int>();
+            foreach (var item in allWords)
+            {
+                if (!vals.ContainsKey(item))
+                {
+                    vals.Add(item, 1);
+                }
+                else
+                {
+                    vals[item] += 1;
+                }
+            }
+
+            if (vals.ContainsValue(1))
+            {
+                return false;
+            }
+            foreach (var item in vals)
+            {
+                if (item.Value % words.Length != 0)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
 
         public static bool IsPalindrome(string word)
         {
@@ -812,6 +1229,11 @@ namespace ProblemSolving
         {
             int asciiCode = (int)s;
             return (asciiCode >= 65 && asciiCode <= 90) || (asciiCode >= 97 && asciiCode <= 122) || (48 <= asciiCode && asciiCode <= 57);
+        }
+        private static bool isCharAlphabetic(char s)
+        {
+            int asciiCode = (int)s;
+            return (asciiCode >= 65 && asciiCode <= 90) || (asciiCode >= 97 && asciiCode <= 122);
         }
     }
 }

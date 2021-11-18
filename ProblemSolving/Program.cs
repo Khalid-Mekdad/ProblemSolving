@@ -26,12 +26,11 @@ namespace ProblemSolving
 
             var equal = ArraysProblems.COUNTKEYSEQUAL(countX, countX.Length, 7);
 
-
             //Console.WriteLine( LeetCodeRandomEasyProblems.NumIdenticalPairs(new int[] { 1, 2, 3, 1, 1, 3 }));
             //Console.WriteLine(string.Join(',', LeetCodeRandomEasyProblems.CountKDifference(new int[] { 1,2,2 ,1 },1)));
-            Console.WriteLine(LeetCodeRandomEasyProblems.ReformatNumber("123 4 - 567"));
-
-
+            //Console.WriteLine(LeetCodeRandomEasyProblems.ShortestCompletingWord("Ah71752", 
+            //    new string[] { "suggest", "letter", "of", "husband", "easy", "education", "drug", "prevent", "writer", "old" }));
+            Console.WriteLine(LeetCodeRandomEasyProblems.IsAlienSorted(new string[] { "kuvp", "q" }, "ngxlkthsjuoqcpavbfdermiywz"));
             //Console.WriteLine(LeetCodeRandomEasyProblems.IsValidParentheses("(("));
         }
     }

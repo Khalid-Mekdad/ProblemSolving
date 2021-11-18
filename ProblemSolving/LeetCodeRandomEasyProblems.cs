@@ -1175,7 +1175,7 @@ namespace ProblemSolving
         }
 
         ///https://leetcode.com/problems/redistribute-characters-to-make-all-strings-equal/
-        public bool MakeEqual(string[] words)
+        public static bool MakeEqual(string[] words)
         {
             var allWords = string.Join("", words);
 
@@ -1206,7 +1206,541 @@ namespace ProblemSolving
             return true;
         }
 
+        /// https://leetcode.com/problems/maximum-nesting-depth-of-the-parentheses
+        public static int MaxDepth(string s)
+        {
+            int count = 0;
+            int depth = 0;
+            foreach (var item in s)
+            {
+                if (item == '(')
+                {
+                    depth += 1;
+                    count = Math.Max(count, depth);
+                }
+                else if (item == ')')
+                {
+                    depth--;
+                }
+            }
 
+            return Math.Max(count, 0);
+        }
+
+        /// https://leetcode.com/problems/largest-substring-between-two-equal-characters/
+        public static int MaxLengthBetweenEqualCharacters(string s)
+        {
+            if (s.Length <= 2)
+            {
+                return 0;
+            }
+            Dictionary<char, List<int>> mapper = new Dictionary<char, List<int>>();
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (!mapper.ContainsKey(s[i]))
+                {
+                    mapper.Add(s[i], new List<int>() { i });
+                }
+                else
+                {
+                    if (mapper[s[i]].Count == 1)
+                    {
+                        mapper[s[i]].Add(i);
+                    }
+                    else
+                    {
+                        mapper[s[i]][1] = i;
+                    }
+                }
+            }
+
+            if (mapper.Values.All(s => s.Count == 1))
+            {
+                return -1;
+            }
+            int max = 0;
+            foreach (var item in mapper.Values.Where(s => s.Count() > 1))
+            {
+                max = Math.Max(max, Math.Abs(item[0] - (item[1] - 1)));
+            }
+            return max;
+        }
+
+        /// https://leetcode.com/problems/unique-email-addresses/
+        public static int NumUniqueEmails(string[] emails)
+        {
+            HashSet<string> mail = new HashSet<string>();
+            StringBuilder alteredMail = new StringBuilder();
+            for (int i = 0; i < emails.Length; i++)
+            {
+                var splitter = emails[i].Split('@');
+                alteredMail.Clear();
+                for (int j = 0; j < splitter[0].Length; j++)
+                {
+                    var character = emails[i][j];
+
+                    if (character != '.' && character != '+')
+                    {
+                        alteredMail.Append(character);
+                    }
+                    else if (character == '.')
+                    {
+                        continue;
+                    }
+                    else if (character == '+')
+                    {
+                        break;
+                    }
+                }
+                mail.Add((alteredMail.Append('@').Append(splitter[1]).ToString()));
+            }
+
+            return mail.Count;
+        }
+
+        /// https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string/
+        public static string RemoveDuplicates(string s)
+        {
+            Stack<char> ss = new Stack<char>();
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (ss.Count > 0 && ss.Peek() == s[i])
+                {
+                    ss.Pop();
+                }
+                else
+                {
+                    ss.Push(s[i]);
+                }
+            }
+
+            return string.Join("", ss.ToArray().Reverse());
+        }
+
+        ///https://leetcode.com/problems/maximum-score-after-splitting-a-string/
+        public static int MaxScore(string s)
+        {
+            int max = 0;
+            for (int i = 0; i < s.Length - 1; i++)
+            {
+                var l = s.Substring(0, i + 1);
+                var r = s.Substring(i + 1);
+
+                max = Math.Max(l.Count(s => s == '0') + r.Count(s => s == '1'), max);
+            }
+            return max;
+
+            //int[] onesCount = new int[s.Length];
+            //int[] zerosCount = new int[s.Length];
+            //for (int i = 0; i < s.Length; i++)
+            //{
+            //    if (i != 0)
+            //    {
+            //        zerosCount[i] += zerosCount[i - 1];
+            //        onesCount[s.Length - i - 1] += onesCount[s.Length - i];
+            //    }
+            //    if (s[i] == '0')
+            //        zerosCount[i]++;
+            //    if (s[s.Length - i - 1] == '1')
+            //        onesCount[s.Length - i - 1]++;
+            //}
+
+            //int maxScore = 0;
+            //for (int i = 0; i < s.Length - 1; i++)
+            //    maxScore = Math.Max(maxScore, zerosCount[i] + onesCount[i + 1]);
+
+            //return maxScore;
+        }
+
+        ///https://leetcode.com/problems/maximum-number-of-balloons/
+        public static int MaxNumberOfBalloons(string text)
+        {
+            Dictionary<char, int> x = new Dictionary<char, int>();
+            HashSet<char> chars = new HashSet<char>() { 'b', 'a', 'l', 'o', 'n' };
+
+            for (int i = 0; i < text.Length; i++)
+            {
+                if (!x.ContainsKey(text[i]) && chars.Contains(text[i]))
+                {
+                    x.Add(text[i], 1);
+                }
+                else
+                {
+                    x[text[i]] += 1;
+                }
+            }
+            if (x.Keys.Count < 5)
+            {
+                return 0;
+            }
+            x['l'] = x['l'] / 2;
+            x['o'] = x['o'] / 2;
+
+            return x.OrderBy(s => s.Value).FirstOrDefault().Value;
+        }
+
+        ///https://leetcode.com/problems/find-words-that-can-be-formed-by-characters/
+        public static int CountCharacters(string[] words, string chars)
+        {
+            Dictionary<char, int> o = new Dictionary<char, int>();
+            Dictionary<char, int> wordfreq = new Dictionary<char, int>();
+            bool escape = false;
+            int count = 0;
+            foreach (var item in chars)
+            {
+                if (!o.ContainsKey(item))
+                {
+                    o.Add(item, 1);
+                }
+                else
+                {
+                    o[item] += 1;
+                }
+            }
+            foreach (var word in words)
+            {
+                escape = false;
+                wordfreq.Clear();
+                foreach (var character in word)
+                {
+                    if (!wordfreq.ContainsKey(character))
+                    {
+                        wordfreq.Add(character, 1);
+                    }
+                    else
+                    {
+                        wordfreq[character] += 1;
+                    }
+                    if (!o.ContainsKey(character) || (wordfreq[character] > o[character]))
+                    {
+                        escape = true;
+                        break;
+                    }
+                }
+                if (escape)
+                {
+                    continue;
+                }
+                count += word.Length;
+            }
+
+            return count;
+        }
+
+        ///https://leetcode.com/problems/long-pressed-name/
+        public static bool IsLongPressedName(string name, string typed)
+        {
+            if (typed.Length < name.Length)
+            {
+                return false;
+            }
+            if (name == typed)
+            {
+                return true;
+            }
+            var t = 0;
+            var n = 0;
+            while (t < typed.Length)
+            {
+                if (n < name.Length && name[n] == typed[t])
+                {
+                    t += 1;
+                    n += 1;
+                }
+                else if (t != 0 && name[n - 1] == typed[t])
+                {
+                    t += 1;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return n == name.Length;
+        }
+
+        ///https://leetcode.com/problems/license-key-formatting/
+        public static string LicenseKeyFormatting(string s, int k)
+        {
+            StringBuilder sb = new StringBuilder();
+            var pureString = s.Where(s => s != '-').ToList();
+            int i = pureString.Count % k;
+            int currentSegmentSize = 0;
+            if (i > 0)
+            {
+                for (int j = 0; j < i; j++)
+                {
+                    sb.Append(pureString[j]);
+                }
+
+                if (i < pureString.Count)
+                {
+                    sb.Append('-');
+                }
+            }
+
+            for (int x = i; x < pureString.Count; x++)
+            {
+                currentSegmentSize += 1;
+                sb.Append((pureString[x]));
+
+                if (currentSegmentSize == k && x != pureString.Count - 1)
+                {
+                    sb.Append('-');
+                    currentSegmentSize = 0;
+                }
+            }
+
+            return sb.ToString().ToUpper();
+        }
+
+        ///https://leetcode.com/problems/fizz-buzz/
+        public static IList<string> FizzBuzz(int n)
+        {
+            var x = new List<string>();
+            for (int i = 1; i <= n; i++)
+            {
+                if (i % 3 == 0 && i % 5 == 0)
+                {
+                    x.Add("FizzBuzz");
+                }
+                else if (i % 3 == 0)
+                {
+                    x.Add("Fizz");
+                }
+                else if (i % 5 == 0)
+                {
+                    x.Add("Buzz");
+                }
+                else
+                {
+                    x.Add(i.ToString());
+                }
+            }
+            return x;
+        }
+
+        ///https://leetcode.com/problems/shortest-completing-word/
+        public static string ShortestCompletingWord(string licensePlate, string[] words)
+        {
+            Dictionary<char, int> x = new Dictionary<char, int>();
+            Dictionary<char, int> wrd = new Dictionary<char, int>();
+            var ans = string.Empty;
+            int max = int.MaxValue;
+            foreach (var item in licensePlate.ToLower())
+            {
+                if (char.IsLetter(item) && !x.ContainsKey(item))
+                {
+                    x.Add(item, 1);
+                }
+                else if (char.IsLetter(item) && x.ContainsKey(item))
+                {
+                    x[item] += 1;
+                }
+            }
+            foreach (var item in words)
+            {
+                wrd.Clear();
+                foreach (var c in item.ToLower())
+                {
+                    if (!wrd.ContainsKey(c) && x.ContainsKey(c))
+                    {
+                        wrd.Add(c, x[c] - 1);
+                    }
+                    else if (wrd.ContainsKey(c))
+                    {
+                        wrd[c] -= 1;
+                    }
+                }
+                if (wrd.Count == x.Count && !wrd.Any(s => s.Value > 0) && max > item.Length)
+                {
+                    ans = item;
+                    max = item.Length;
+                }
+
+            }
+            return ans;
+        }
+
+        ///https://leetcode.com/problems/word-pattern/
+        public static bool WordPattern(string pattern, string s)
+        {
+            var ss = s.Split(" ");
+            Dictionary<char, string> chars = new Dictionary<char, string>();
+            Dictionary<string, char> words = new Dictionary<string, char>();
+            for (int i = 0; i < pattern.Length; i++)
+            {
+                var word = ss[i];
+                var p = pattern[i];
+                if ((chars.ContainsKey(p) && chars[p] != word) || (words.ContainsKey(word) && words[word] != p))
+                {
+                    return false;
+                }
+                else
+                {
+                    chars.TryAdd(p, word);
+                    words.TryAdd(word, p);
+                }
+            }
+            return true;
+        }
+
+        ///https://leetcode.com/problems/student-attendance-record-i/
+        public static bool CheckRecord(string s)
+        {
+            var result = true;
+            var a = 0;
+            var l = 0;
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (s[i] == 'A')
+                {
+                    l = 0;
+                    a += 1;
+                    if (a == 2)
+                    {
+                        return false;
+                    }
+                }
+                else if (s[i] == 'L')
+                {
+                    l += 1;
+                    if (l == 3)
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    l = 0;
+                }
+            }
+
+
+            return result;
+
+        }
+
+        ///https://leetcode.com/problems/most-common-word/
+        public static string MostCommonWord(string paragraph, string[] banned)
+        {
+            HashSet<string> banneds = new HashSet<string>(banned);
+            HashSet<char> punctiuation = new HashSet<char>(new char[] { '.', ',', ';', '\'' });
+            Dictionary<string, int> dic = new Dictionary<string, int>();
+            StringBuilder processedPara = new StringBuilder();
+
+            for (int i = 0; i < paragraph.Length; i++)
+            {
+                if (char.IsLetter(paragraph[i]))
+                {
+                    processedPara.Append(paragraph[i]);
+                }
+                else if (processedPara.Length > 0 && char.IsLetter(paragraph[i - 1]) && (punctiuation.Contains(paragraph[i]) || char.IsWhiteSpace(paragraph[i])))
+                {
+                    processedPara.Append(" ");
+                }
+            }
+            var words = processedPara.ToString().Split(" ");
+            if (banned.Length == 0 && words.Length == 1)
+            {
+                return words[0];
+            }
+            for (int i = 0; i < words.Length; i++)
+            {
+                if (!banneds.Contains(words[i].ToLower()))
+                {
+                    if (!dic.ContainsKey(words[i].ToLower()))
+                    {
+                        dic.Add(words[i].ToLower(), 1);
+                    }
+                    else
+                    {
+                        dic[words[i].ToLower()] += 1;
+                    }
+                }
+            }
+            return dic.OrderByDescending(s => s.Value).FirstOrDefault().Key.ToLower();
+
+        }
+
+        ///https://leetcode.com/problems/make-the-string-great/
+        public static string MakeGood(string s)
+        {
+            if (string.IsNullOrEmpty(s))
+            {
+                return s;
+            }
+            Stack<char> sb = new Stack<char>();
+            for (int i = 0; i < s.Length; i++)
+            {
+
+                if (sb.Count > 0 && Math.Abs((int)(sb.Peek()) - (int)(s[i])) == 32)
+                {
+                    sb.Pop();
+                }
+                else
+                {
+                    sb.Push(s[i]);
+                }
+            }
+
+            return string.Join("", sb.Reverse());
+        }
+
+        ///https://leetcode.com/problems/verifying-an-alien-dictionary/
+        public static bool IsAlienSorted(string[] words, string order)
+        {
+            Dictionary<char, int> xx = new Dictionary<char, int>();
+            for (int i = 0; i < order.Length; i++)
+            {
+                xx.Add(order[i], i);
+
+            }
+
+            for (int i = 0; i < words.Length - 1; i++)
+            {
+                string word1 = words[i];
+                string word2 = words[i + 1];
+
+                if (xcompare(xx, word1, word2))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private static bool xcompare(Dictionary<char, int> xx, string word1, string word2)
+        {
+            int w1 = 0;
+            int w2 = 0;
+            bool x = true;
+            while (w1 < word1.Length && w2 < word2.Length)
+            {
+                if (xx[word1[w1]] > xx[word2[w2]])
+                {
+                    return true;
+                }
+                else if (xx[word1[w1]] == xx[word2[w2]])
+                {
+                    w1 += 1;
+                    w2 += 1;
+                }
+                else
+                {
+                    x = false;
+                    break;
+                }
+            }
+
+            if (x && word1.Length > word2.Length)
+            {
+                return true;
+            }
+           
+            return false;
+        }
         public static bool IsPalindrome(string word)
         {
             var result = true;
@@ -1224,7 +1758,6 @@ namespace ProblemSolving
             }
             return result;
         }
-
         private static bool isCharAlphanumeric(char s)
         {
             int asciiCode = (int)s;

@@ -30,7 +30,7 @@ namespace ProblemSolving
             //Console.WriteLine(string.Join(',', LeetCodeRandomEasyProblems.CountKDifference(new int[] { 1,2,2 ,1 },1)));
             //Console.WriteLine(LeetCodeRandomEasyProblems.ShortestCompletingWord("Ah71752", 
             //    new string[] { "suggest", "letter", "of", "husband", "easy", "education", "drug", "prevent", "writer", "old" }));
-            Console.WriteLine(LeetCodeRandomEasyProblems.IsAlienSorted(new string[] { "kuvp", "q" }, "ngxlkthsjuoqcpavbfdermiywz"));
+            Console.WriteLine(LeetCodeRandomEasyProblems.IsAnagram("a","ab"));
             //Console.WriteLine(LeetCodeRandomEasyProblems.IsValidParentheses("(("));
         }
     }

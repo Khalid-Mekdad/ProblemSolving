@@ -1711,6 +1711,90 @@ namespace ProblemSolving
             return true;
         }
 
+        ///https://leetcode.com/problems/rearrange-spaces-between-words/    
+        public static string ReorderSpaces(string text)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            var words = text.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+            var spaces = text.Count(v => v == ' ');
+
+            var mod = spaces % words.Length;
+            for (int i = 0; i < words.Length; i++)
+            {
+                int j = 0;
+                sb.Append(words[i]);
+                while (j < (spaces / words.Length - 1))
+                {
+                    sb.Append(" ");
+                    j++;
+                }
+            }
+
+            if (mod > 0)
+            {
+                int v = 0;
+                while (v < mod)
+                {
+                    sb.Append(" ");
+                    v++;
+                }
+            }
+
+            return sb.ToString();
+        }
+
+        ///https://leetcode.com/problems/valid-anagram/
+        public static bool IsAnagram(string s, string t)
+        {
+            Dictionary<char, int> mapS = new Dictionary<char, int>();
+            Dictionary<char, int> mapT = new Dictionary<char, int>();
+            HashSet<char> done = new HashSet<char>();
+
+            if (s.Length != t.Length)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (!mapS.ContainsKey(s[i]))
+                {
+                    mapS.Add(s[i],1);
+                }
+                else
+                {
+                    mapS[s[i]] += 1;
+                }
+
+                if (!mapT.ContainsKey(t[i]))
+                {
+                    mapT.Add(t[i], 1);
+                }
+                else
+                {
+                    mapT[t[i]] += 1;
+                }
+
+            }
+            foreach (var item in mapS)
+            {
+                if (!done.Contains(item.Key))
+                {
+                    if (mapT.ContainsKey(item.Key) && mapT[item.Key] == mapS[item.Key])
+                    {
+                        done.Add(item.Key);
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
         private static bool xcompare(Dictionary<char, int> xx, string word1, string word2)
         {
             int w1 = 0;
@@ -1738,7 +1822,7 @@ namespace ProblemSolving
             {
                 return true;
             }
-           
+
             return false;
         }
         public static bool IsPalindrome(string word)

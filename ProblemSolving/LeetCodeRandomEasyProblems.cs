@@ -7,32 +7,113 @@ namespace ProblemSolving
 {
     public class LeetCodeRandomEasyProblems
     {
-        //public static int RomanToInt(string s)
-        //{
-        //    var dict = new Dictionary<char, int>()
-        //    {
-        //        {'I',1 },
-        //        {'V',5},
-        //        {'X',10 },
-        //        {'L',50},
-        //        {'C',100 },
-        //        {'D',500 },
-        //        {'M',1000 },
-        //    };
-        //    int result = 0;
+        ///https://leetcode.com/problems/roman-to-integer/
+        public static int RomanToInt(string s)
+        {
+            var dict = new Dictionary<char, int>()
+            {
+                {'I',1 },
+                {'V',5},
+                {'X',10 },
+                {'L',50},
+                {'C',100 },
+                {'D',500 },
+                {'M',1000 },
+            };
 
-        //    for (int i = 0; i <= s.Length - 1; i++)
-        //    {
-        //        if (i == 0)
-        //        {
-        //            result += dict[s[i]];
-        //        }
-        //    }
 
-        //    return result;
-        //}
+            int result = 0;
+            int i = 0;
+            while (i < s.Length)
+            {
+                if (s[i] == 'I')
+                {
+                    if (i + 1 < s.Length)
+                    {
+                        if (s[i + 1] == 'V')
+                        {
+                            result += 4;
+                            i += 2;
+                        }
+                        else if (s[i + 1] == 'X')
+                        {
+                            result += 9;
+                            i += 2;
+                        }
+                        else
+                        {
+                            result += dict[s[i]];
+                            i += 1;
+                        }
+                    }
+                    else
+                    {
+                        result += dict[s[i]];
+                        i += 1;
+                    }
+                }
+                else if (s[i] == 'X')
+                {
+                    if (i + 1 < s.Length)
+                    {
+                        if (s[i + 1] == 'L')
+                        {
+                            result += 40;
+                            i += 2;
+                        }
+                        else if (s[i + 1] == 'C')
+                        {
+                            result += 90;
+                            i += 2;
+                        }
+                        else
+                        {
+                            result += dict[s[i]];
+                            i += 1;
+                        }
+                    }
+                    else
+                    {
+                        result += dict[s[i]];
+                        i += 1;
+                    }
+                }
+                else if (s[i] == 'C')
+                {
+                    if (i + 1 < s.Length)
+                    {
+                        if (s[i + 1] == 'D')
+                        {
+                            result += 400;
+                            i += 2;
+                        }
+                        else if (s[i + 1] == 'M')
+                        {
+                            result += 900;
+                            i += 2;
+                        }
+                        else
+                        {
+                            result += dict[s[i]];
+                            i += 1;
+                        }
+                    }
+                    else
+                    {
+                        result += dict[s[i]];
+                        i += 1;
+                    }
+                }
+                else
+                {
+                    result += dict[s[i]];
+                    i += 1;
+                }
+            }
 
-        //https://leetcode.com/problems/length-of-last-word/
+            return result;
+        }
+
 
         ///https://leetcode.com/problems/length-of-last-word/
         public static int LengthOfLastWord(string s)
@@ -942,31 +1023,57 @@ namespace ProblemSolving
         ///https://leetcode.com/problems/find-the-difference/
         public static char FindTheDifference(string s, string t)
         {
-            if (string.IsNullOrEmpty(s))
+            var charAndCount = new int[256];
+            foreach (var c in s)
             {
-                return t[0];
-            }
-            Dictionary<char, int> k = new Dictionary<char, int>();
-            foreach (var item in t)
-            {
-                if (!k.ContainsKey(item))
-                {
-                    k.Add(item, 1);
-                }
-                else
-                {
-                    k[item] += 1;
-                }
+                charAndCount[c]++;
             }
 
-            if (k.Any(s => s.Value == 1))
+            foreach (var c in t)
             {
-                return k.FirstOrDefault(s => s.Value == 1).Key;
+                charAndCount[c]--;
             }
-            else
+
+            for (int i = 0; i < 256; i++)
             {
-                return k.FirstOrDefault(s => k.Max(o => o.Value) == s.Value).Key;
+                if (charAndCount[i] < 0)
+                    return (char)i;
             }
+
+            return new char();
+            //char res = '@';
+            //if (string.IsNullOrEmpty(s))
+            //{
+            //    return t[0];
+            //}
+            //Dictionary<char, int> sMap = new Dictionary<char, int>();
+            //Dictionary<char, int> tMap = new Dictionary<char, int>();
+
+            //foreach (var item in s)
+            //{
+            //    if (!sMap.ContainsKey(item))
+            //        sMap.Add(item, 1);
+            //    else
+            //        sMap[item] += 1;
+            //}
+            //foreach (var item in t)
+            //{
+            //    if (!tMap.ContainsKey(item))
+            //        tMap.Add(item, 1);
+            //    else
+            //        tMap[item] += 1;
+            //}
+            //foreach (var item in tMap)
+            //{
+            //    if (!sMap.ContainsKey(item.Key) || sMap[item.Key] < tMap[item.Key])
+            //    {
+            //        res = item.Key;
+            //        break;
+            //    }
+            //}
+
+            //return res;
+
         }
 
         ///https://leetcode.com/problems/split-a-string-in-balanced-strings/
@@ -1760,7 +1867,7 @@ namespace ProblemSolving
             {
                 if (!mapS.ContainsKey(s[i]))
                 {
-                    mapS.Add(s[i],1);
+                    mapS.Add(s[i], 1);
                 }
                 else
                 {
@@ -1793,6 +1900,589 @@ namespace ProblemSolving
             }
 
             return true;
+        }
+
+        ///https://leetcode.com/problems/excel-sheet-column-title/
+        ///NOT SOLVED
+        public static string ConvertToTitle(int columnNumber)
+        {
+            //StringBuilder sb = new StringBuilder();
+            //var ss = columnNumber.ToString();
+            //for (int i = 0; i < ss.Length; i++)
+            //{
+            //    var x = (i * 26) + (char)(int.Parse(ss[i].ToString())-'A') + 1;
+            //    sb.Append(x);
+            //    sb.in
+            //}
+            //return/* sb.ToString();
+            return string.Empty;
+        }
+
+        /// https://leetcode.com/problems/string-matching-in-an-array/
+        public static IList<string> StringMatching(string[] words)
+        {
+            List<string> X = new List<string>();
+            for (int i = 0; i < words.Length; i++)
+            {
+                for (int j = 0; j < words.Length; j++)
+                {
+                    if (i != j && words[i].Contains(words[j]))
+                    {
+                        X.Add(words[j]);
+                        break;
+                    }
+                }
+            }
+            return X;
+        }
+
+        /// https://leetcode.com/problems/positions-of-large-groups/
+        public static IList<IList<int>> LargeGroupPositions(string s)
+        {
+            List<List<int>> g = new List<List<int>>();
+            int i = 0;
+            char lastChar = ' ';
+            foreach (var x in s)
+            {
+                if (g.Count == 0 || (g.Count > 0 && lastChar != x))
+                {
+                    g.Add(new List<int>() { i });
+                    lastChar = x;
+                }
+                else
+                {
+                    g.Last().Add(i);
+                }
+                i++;
+            }
+
+            return g.Where(s => s.Count >= 3).Select(z => new List<int> { z.FirstOrDefault(), z.LastOrDefault() }).ToArray();
+        }
+
+        ///https://leetcode.com/problems/decrypt-string-from-alphabet-to-integer-mapping/
+        public static string FreqAlphabets(string s)
+        {
+            StringBuilder sb = new StringBuilder();
+            int hashedDigit = 0;
+
+            bool hashDetected = false;
+            int tailCount = 0;
+            for (int i = s.Length - 1; i >= 0; i--)
+            {
+                if (s[i] == '#')
+                {
+                    hashDetected = true;
+                    continue;
+                }
+                if (hashDetected & tailCount < 2)
+                {
+                    tailCount += 1;
+                    if (tailCount == 1)
+                    {
+                        hashedDigit += int.Parse(s[i].ToString()) * 1;
+                    }
+                    else
+                    {
+                        hashedDigit += int.Parse(s[i].ToString()) * 10;
+                    }
+                    if (tailCount == 2)
+                    {
+                        char c = (char)('a' + hashedDigit - 1);
+                        sb.Append(c);
+                        hashDetected = false;
+                        tailCount = hashedDigit = 0;
+                    }
+                }
+
+                else
+                {
+                    char c = (char)('a' + s[i] - '0' - 1);
+                    sb.Append(c);
+                }
+            }
+            LinkedList<int> v = new LinkedList<int>();
+
+            return string.Join("", sb.ToString().Reverse());
+        }
+
+        ///https://leetcode.com/problems/unique-number-of-occurrences/
+        public static bool UniqueOccurrences(int[] arr)
+        {
+            Dictionary<int, int> map = new Dictionary<int, int>();
+            HashSet<int> dups = new HashSet<int>();
+            foreach (var item in arr)
+            {
+                if (!map.ContainsKey(item))
+                {
+                    map.Add(item, 1);
+                }
+                else
+                {
+                    map[item] += 1;
+                }
+            }
+            foreach (var item in map.Values)
+            {
+                if (dups.Contains(item))
+                {
+                    return false;
+                }
+                else
+                {
+                    dups.Add(item);
+                }
+            }
+            return true;
+        }
+
+        /// https://leetcode.com/problems/delete-columns-to-make-sorted/
+        public static int MinDeletionSize(string[] strs)
+        {
+            int count = 0;
+            for (int i = 0; i < strs[0].Length; i++)
+            {
+                for (int j = 0; j < strs.Length - 1; j++)
+                {
+                    if ((int)(strs[j][i]) > (int)(strs[j + 1][i]))
+                    {
+                        count += 1;
+                        break;
+                    }
+                }
+            }
+            return count;
+        }
+
+        /// https://leetcode.com/problems/matrix-diagonal-sum/
+        public static int DiagonalSum(int[][] mat)
+        {
+            int i = 0;
+            int j = mat.Length - 1;
+            int sum = 0;
+
+
+            while (i < mat.Length)
+            {
+                sum += mat[i][i];
+                if (i != j)
+                {
+                    sum += mat[i][j];
+                }
+
+                i++;
+                j--;
+            }
+            return sum;
+        }
+
+        /// https://leetcode.com/problems/final-prices-with-a-special-discount-in-a-shop/
+        public static int[] FinalPrices(int[] prices)
+        {
+            int[] result = new int[prices.Length];
+            int discount = 0;
+
+            for (int i = 0; i < prices.Length; i++)
+            {
+                discount = 0;
+                for (int j = i + 1; j < prices.Length; j++)
+                {
+                    if (prices[j] <= prices[i])
+                    {
+                        discount = prices[j];
+                        break;
+                    }
+                }
+                result[i] = prices[i] - discount;
+            }
+
+            return result;
+
+        }
+
+        ///https://leetcode.com/problems/find-common-characters/
+        public static IList<string> CommonChars(string[] words)
+        {
+            Dictionary<char, int> vb = new Dictionary<char, int>();
+            List<string> commonChars = new List<string>();
+            foreach (var word in words)
+            {
+                foreach (var alpha in word)
+                {
+                    if (!vb.ContainsKey(alpha))
+                    {
+                        vb.Add(alpha, 1);
+                    }
+                    else
+                    {
+                        vb[alpha] += 1;
+                    }
+                }
+            }
+
+            foreach (var item in vb.Where(s => s.Value >= words.Length))
+            {
+                var t = item.Key;
+                int currentCharMax = int.MaxValue;
+                foreach (var word in words)
+                {
+                    currentCharMax = Math.Min(currentCharMax, word.Count(s => s == t));
+                }
+
+                for (int j = 0; j < currentCharMax; j++)
+                {
+                    commonChars.Add(t.ToString());
+                }
+            }
+
+            return commonChars;
+        }
+
+        /// https://leetcode.com/problems/keyboard-row/
+        public static string[] FindWords(string[] words)
+        {
+            string s1 = "qwertyuiop";
+            string s2 = "asdfghjkl";
+            string s3 = "zxcvbnm";
+            Dictionary<char, int> map = new Dictionary<char, int>();
+            List<string> result = new List<string>();
+            foreach (var item in s1)
+                map.Add(item, 1);
+            foreach (var item in s2)
+                map.Add(item, 2);
+            foreach (var item in s3)
+                map.Add(item, 3);
+
+            int targetRow;
+            bool match = true;
+            foreach (var word in words)
+            {
+                targetRow = 0;
+                match = true;
+                for (int i = 0; i < word.Length; i++)
+                {
+                    if (i == 0)
+                    {
+                        targetRow = map[char.ToLower(word[i])];
+                    }
+                    else if (map[char.ToLower(word[i])] != targetRow)
+                    {
+                        match = false;
+                        break;
+                    }
+                }
+                if (match)
+                    result.Add(word);
+            }
+
+            return result.ToArray();
+        }
+
+        /// https://leetcode.com/problems/minimum-distance-to-the-target-element/
+        public int GetMinDistance(int[] nums, int target, int start)
+        {
+            int min = int.MaxValue;
+            for (int i = 0; i < nums.Length; i++)
+            {
+                if (nums[i] == target)
+                {
+                    min = Math.Min(min, Math.Abs(i - start));
+                }
+            }
+            return min;
+        }
+
+        /// https://leetcode.com/problems/find-all-numbers-disappeared-in-an-array/
+        public IList<int> FindDisappearedNumbers(int[] nums)
+        {
+            HashSet<int> nv = new HashSet<int>();
+            for (int i = 1; i <= nums.Length; i++)
+            {
+                nv.Add(i);
+            }
+            for (int i = 0; i < nums.Length; i++)
+            {
+                if (nv.Contains(nums[i]))
+                {
+                    nv.Remove(nums[i]);
+                }
+            }
+
+            return nv.ToArray();
+        }
+
+        ///https://leetcode.com/problems/time-needed-to-buy-tickets/
+        public static int TimeRequiredToBuy(int[] tickets, int k)
+        {
+            int seconds = 0;
+            int i = 0;
+            while (tickets[k] > 0)
+            {
+                if (tickets[i] > 0)
+                {
+                    seconds += 1;
+                    tickets[i] -= 1;
+                }
+                i = i + 1 == tickets.Length ? 0 : i += 1;
+            }
+            //for (int n = 0; n < tickets.Length; n++)
+            //{
+            //    if (n <= k) 
+            //        seconds += Math.Min(tickets[k], tickets[n]);
+            //    else 
+            //        seconds += Math.Min(tickets[k] - 1, tickets[n]);
+            //}
+            return seconds;
+        }
+
+        ///https://leetcode.com/problems/slowest-key/
+        public static char SlowestKey(int[] releaseTimes, string keysPressed)
+        {
+            if (releaseTimes.Length == 1)
+            {
+                return keysPressed[0];
+            }
+            int max = releaseTimes[0];
+            char longestKey = keysPressed[0];
+            for (int i = 1; i < releaseTimes.Length; i++)
+            {
+                int currentDifff = releaseTimes[i] - releaseTimes[i - 1];
+                if (currentDifff >= max)
+                {
+                    if (Math.Max(currentDifff, max) == max)
+                    {
+                        longestKey = (char)Math.Max(keysPressed[i], (int)longestKey);
+                    }
+                    else
+                    {
+                        max = releaseTimes[i] - releaseTimes[i - 1];
+                        longestKey = keysPressed[i];
+                    }
+                }
+            }
+            return longestKey;
+        }
+
+
+        ///https://leetcode.com/problems/next-greater-element-i/
+        public static int[] NextGreaterElement(int[] nums1, int[] nums2)
+        {
+            Dictionary<int, int> dic = new Dictionary<int, int>();
+            Stack<int> stack = new Stack<int>();
+            foreach (var num in nums2)
+            {
+                while (stack.Count > 0 && num > stack.Peek())
+                    dic.Add(stack.Pop(), num);
+
+                stack.Push(num);
+            }
+
+            int[] res = new int[nums1.Length];
+            for (int i = 0; i < nums1.Length; i++)
+                res[i] = dic.ContainsKey(nums1[i]) ? dic[nums1[i]] : -1;
+
+            return res;
+            //Dictionary<int, int> v = new Dictionary<int, int>();
+            //var result = new int[nums1.Length];
+            //for (int i = 0; i < nums2.Length; i++)
+            //{
+            //    v.Add(nums2[i], i);
+            //}
+            //for (int j = 0; j < nums1.Length; j++)
+            //{
+            //    int value = -1;
+            //    int index = v[nums1[j]];
+            //    for (int k = index + 1; k < nums2.Length; k++)
+            //    {
+            //        if (nums2[k] > nums1[j])
+            //        {
+            //            value = nums2[k];
+            //            break;
+            //        }
+            //    }
+            //    result[j] = value;
+            //}
+
+            //return result;
+            //int[] next_greater = findNextGreater_num2(nums2);
+
+            //int[] res = new int[nums1.Length];
+
+
+            //for (int i = 0; i < nums1.Length; i++)
+            //{
+            //    int k = nums1[i];
+
+            //    for (int j = 0; j < nums2.Length; j++)
+            //    {
+            //        if (nums2[j] == k)
+            //        {
+            //            res[i] = next_greater[j];
+            //            break;
+            //        }
+            //    }//inner 
+
+            //}
+            //return res;
+        }
+
+        ///https://leetcode.com/problems/first-unique-character-in-a-string/
+        public int FirstUniqChar(string s)
+        {
+            Dictionary<char, List<int>> map = new Dictionary<char, List<int>>();
+
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (!map.ContainsKey(s[i]))
+                {
+                    map.Add(s[i], new List<int> { i });
+                }
+                else
+                {
+                    map[s[i]].Add(i);
+                }
+            }
+
+            if (!map.Any(s => s.Value.Count == 1))
+                return -1;
+
+            return map.FirstOrDefault(s => s.Value.Count == 1).Value[0];
+        }
+
+        ///https://leetcode.com/problems/binary-search/
+        public static int Search(int[] nums, int target)
+        {
+            int l = 0;
+            int r = nums.Length - 1;
+
+            while (l <= r)
+            {
+                int mid = (r + l) / 2;
+                if (nums[mid] == target)
+                {
+                    return mid;
+                }
+                if (nums[mid] > target)
+                {
+                    r = mid - 1;
+                }
+                else
+                {
+                    l = mid + 1;
+                }
+            }
+
+            return -1;
+        }
+
+        /// https://leetcode.com/problems/squares-of-a-sorted-array/
+        public static int[] SortedSquares(int[] nums)
+        {
+            int[] res = new int[nums.Length];
+            int start = 0;
+            int end = nums.Length - 1;
+            for (int i = end; i >= 0; i--)
+            {
+                if (Math.Abs(nums[end]) > Math.Abs(nums[start]))
+                {
+
+                    res[i] = nums[end] * nums[end];
+                    end--;
+                }
+                else
+                {
+                    res[i] = nums[start] * nums[start];
+                    start++;
+                }
+            }
+
+            return res;
+        }
+
+        public static int[] findNextGreater_num2(int[] arr)
+        {
+            int n = arr.Length;
+            int[] next_greater = new int[n];
+
+            Stack<int> stack = new Stack<int>();
+
+            stack.Push(arr[n - 1]);
+            next_greater[n - 1] = -1;
+
+
+            for (int i = n - 2; i >= 0; i--)
+            {
+
+                while (stack.Count > 0 && arr[i] >= stack.Peek())
+                {
+                    stack.Pop();
+                }
+
+                if (stack.Count > 0)
+                {
+                    next_greater[i] = stack.Peek();
+                }
+                else
+                {
+                    next_greater[i] = -1;
+                }
+
+                stack.Push(arr[i]);
+            }
+
+            return next_greater;
+        }
+
+        public static int RemoveDuplicates(int[] nums)
+        {
+            if (nums == null || nums.Length == 0)
+                return 0;
+            else if (nums.Length == 1)
+                return 1;
+
+            int index1 = 0,
+                index2 = 1;
+
+            while (index2 <= nums.Length - 1)
+                if (nums[index1] == nums[index2])
+                    index2++;
+                else
+                    nums[++index1] = nums[index2++];
+
+            return ++index1;
+        }
+        public static int SumIntDigits(int num)
+        {
+            int sum = 0;
+
+            while (num != 0)
+            {
+                sum += num % 10;
+                num /= 10;
+            }
+
+            return sum;
+
+        }
+
+        private static void Union(Dictionary<int, int[]> dict, int res, int x, int y)
+        {
+            int px = Find(dict, x),
+                py = Find(dict, y);
+
+            if (px != py)
+            {
+                dict[px][0] = py;
+                dict[py][1] += dict[px][1];
+
+                res = Math.Max(res, dict[py][1]);
+            }
+        }
+        private static int Find(Dictionary<int, int[]> dict, int x)
+        {
+            if (x != dict[x][0])
+                dict[x][0] = Find(dict, dict[x][0]);
+
+            return dict[x][0];
         }
 
         private static bool xcompare(Dictionary<char, int> xx, string word1, string word2)

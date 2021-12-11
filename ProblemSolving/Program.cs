@@ -7,31 +7,26 @@ namespace ProblemSolving
     {
         static void Main(string[] args)
         {
+            var tree = new TreeNode<char>('F');
+            tree.left = new TreeNode<char>('B');
+            tree.left.left = new TreeNode<char>('A');
+            tree.left.right = new TreeNode<char>('D');
+            tree.left.right.left = new TreeNode<char>('C');
+            tree.left.right.right = new TreeNode<char>('E');
 
-            var arr = new int[] { 2, 3, 5, 1, 3 };
-            var arr2 = new int[] { 1, 2, 3, 4 };
-            //var resu = ArraysProblems.KidsWithCandies(arr, 3);
+            tree.right = new TreeNode<char>('G');
+            tree.right.right = new TreeNode<char>('I');
+            tree.right.right.left = new TreeNode<char>('H');
 
-            var nums = new int[] { 0, 1, 2, 3, 4 };
-            var indexes = new int[] { 0, 1, 2, 2, 1 };
+            var head = new ListNode<int>(1);
+            head.next = new ListNode<int>(2);
+            head.next.next = new ListNode<int>(3);
+            head.next.next.next = new ListNode<int>(4);
 
-            var searchNums = new int[] { 1, 4, 5, 6, 7, 8, 12, 23, 56, 77, 81 };
+            //var resu = LeetCodeBinaryTreeProblems.LevelOrder<char>(tree);
 
-            //ArraysProblems.BinarySearch(searchNums, 81);
-            //var x = new int[] { 12, 9, 3, 7, 14, 11, 6, 2, 10, 5 };
-            //ArraysProblems.MergeSort(x, 0, x.Length - 1);
-            //Console.WriteLine(string.Join(',', x));
+            LeetCodeRandomEasyProblems.SortedSquares(new int[] {-4, -1, 0, 3, 10 });
 
-            var countX = new int[] { 4, 1, 5, 0, 1, 6, 5, 1, 5, 3 };
-
-            var equal = ArraysProblems.COUNTKEYSEQUAL(countX, countX.Length, 7);
-
-            //Console.WriteLine( LeetCodeRandomEasyProblems.NumIdenticalPairs(new int[] { 1, 2, 3, 1, 1, 3 }));
-            //Console.WriteLine(string.Join(',', LeetCodeRandomEasyProblems.CountKDifference(new int[] { 1,2,2 ,1 },1)));
-            //Console.WriteLine(LeetCodeRandomEasyProblems.ShortestCompletingWord("Ah71752", 
-            //    new string[] { "suggest", "letter", "of", "husband", "easy", "education", "drug", "prevent", "writer", "old" }));
-            Console.WriteLine(LeetCodeRandomEasyProblems.IsAnagram("a","ab"));
-            //Console.WriteLine(LeetCodeRandomEasyProblems.IsValidParentheses("(("));
         }
     }
 }
